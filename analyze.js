@@ -20,8 +20,7 @@ VIBES válidos: Cinematográfico, Dinámico, Documental, Editorial, Intimista, �
 
 Instrucciones: Cada escena o momento diferenciado = un plano separado. Sé preciso y técnico. Solo JSON.`;
 
-export default async function handler(req, res) {
-  // CORS headers — permite llamadas desde el mismo dominio Vercel
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -29,14 +28,20 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST')   return res.status(405).json({ error: 'Method not allowed' });
 
-  const { guion } = req.body;
+  // Vercel a veces no parsea el body automáticamente — lo hacemos manual si hace falta
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch { body = {}; }
+  }
+
+  const { guion } = body || {};
   if (!guion || typeof guion !== 'string' || guion.trim().length < 10) {
     return res.status(400).json({ error: 'Guion inválido o demasiado corto.' });
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'API key no configurada en el servidor.' });
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY no configurada. Agregala en Vercel → Settings → Environment Variables.' });
   }
 
   try {
@@ -69,7 +74,7 @@ export default async function handler(req, res) {
     let planos;
     try {
       planos = JSON.parse(clean);
-    } catch {
+    } catch (e) {
       return res.status(502).json({ error: 'El modelo no devolvió JSON válido.', raw: clean });
     }
 
@@ -83,4 +88,4 @@ export default async function handler(req, res) {
     console.error('[analyze] Error:', err);
     return res.status(500).json({ error: err.message || 'Error interno del servidor.' });
   }
-}
+};
