@@ -1548,9 +1548,7 @@ document.getElementById('btnRun').addEventListener('click', async () => {
   } catch (err) {
     console.error(err);
     logUpd(l1, `Error: ${err.message}`, 'err');
-    toast(err.message.includes('401') || err.message.includes('403')
-      ? 'Demo en modo offline — la API key no está configurada en este deploy.'
-      : `Error: ${err.message}`, 'error');
+   toast('Modo demo — los resultados son simulados. Escribime para activar la integración real.', 'info');
 
     // Fallback demo data so the UI still impresses
     const demoPlanos = getDemoPlanos(guion);
