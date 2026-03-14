@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Script Intelligence — Studio23 × AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   VARIABLES
+══════════════════════════════════════════════ */
+:root {
+  --bg:        #080808;
+  --bg2:       #0f0f0f;
+  --bg3:       #141414;
+  --bg4:       #1a1a1a;
+  --line:      #1e1e1e;
+  --line2:     #2a2a2a;
+  --white:     #f2efe9;
+  --dim:       #7a7772;
+  --faint:     #333330;
+  --red:       #e05252;
+  --green:     #4db87a;
+  --amber:     #d4a843;
+  --mono:      'IBM Plex Mono', monospace;
+  --display:   'Bebas Neue', sans-serif;
+  --body:      'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* scanlines */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px);
+  pointer-events: none;
+  z-index: 9000;
+}
+
+/* ══════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 52px;
+  background: rgba(8,8,8,0.95);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+
+.nav-logo-badge {
+  width: 24px; height: 24px;
+  background: var(--white);
+  color: var(--bg);
+  font-size: 9px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  letter-spacing: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--line2);
+  color: var(--dim);
+}
+
+/* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 52px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* big background number */
+.hero-bg-num {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--display);
+  font-size: clamp(280px, 40vw, 520px);
+  color: rgba(255,255,255,0.02);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: up 0.7s ease 0.1s forwards;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(72px, 11vw, 160px);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: up 0.8s ease 0.25s forwards;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+}
+
+.hero-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  opacity: 0;
+  animation: up 0.8s ease 0.4s forwards;
+}
+
+.hero-desc {
+  max-width: 480px;
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--dim);
+  line-height: 1.7;
+}
+
+.hero-desc strong { color: var(--white); font-weight: 500; }
+
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: var(--white);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.hero-cta:hover { background: #fff; letter-spacing: 0.26em; }
+
+/* ══════════════════════════════════════════════
+   SECTIONS COMMON
+══════════════════════════════════════════════ */
+.section {
+  padding: 100px 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.section-sep {
+  height: 1px;
+  background: var(--line);
+  margin: 0 48px;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+.label-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--faint);
+}
+
+.label-text {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.label-row::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ══════════════════════════════════════════════
+   01 — PROPUESTA
+══════════════════════════════════════════════ */
+.prop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.prop-title {
+  font-family: var(--display);
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  margin-bottom: 24px;
+}
+
+.prop-body {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--dim);
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+.prop-body strong { color: var(--white); font-weight: 500; }
+
+.prop-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--line2);
+}
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.2s;
+}
+.skill-row:last-child { border-bottom: none; }
+.skill-row:hover { background: rgba(255,255,255,0.02); }
+
+.skill-idx {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--faint);
+  letter-spacing: 0.1em;
+}
+
+.skill-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--white);
+  letter-spacing: 0.04em;
+}
+
+.skill-desc {
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 2px;
+}
+
+.skill-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border: 1px solid var(--line2);
+  color: var(--dim);
+}
+.skill-badge.active {
+  border-color: rgba(77,184,122,0.4);
+  color: var(--green);
+  background: rgba(77,184,122,0.06);
+}
+
+/* ══════════════════════════════════════════════
+   02 — ARQUITECTURA DEL FLUJO
+══════════════════════════════════════════════ */
+.arch-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 4vw, 60px);
+  line-height: 1;
+  margin-bottom: 48px;
+}
+
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.flow-step {
+  padding: 28px 24px;
+  border: 1px solid var(--line2);
+  border-right: none;
+  position: relative;
+  transition: background 0.2s;
+}
+.flow-step:last-child { border-right: 1px solid var(--line2); }
+.flow-step:hover { background: rgba(255,255,255,0.025); }
+
+.flow-arrow {
+  position: absolute;
+  top: 50%; right: -12px;
+  transform: translateY(-50%);
+  z-index: 2;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--faint);
+  background: var(--bg2);
+  padding: 2px 0;
+}
+
+.flow-step-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--faint);
+  margin-bottom: 12px;
+}
+
+.flow-step-icon {
+  width: 28px; height: 28px;
+  border: 1px solid var(--line2);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+
+.flow-step-name {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+
+.flow-step-desc {
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+.flow-tech {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--amber);
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════════
+   03 — SYSTEM PROMPT
+══════════════════════════════════════════════ */
+.prompt-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.prompt-info h2 {
+  font-family: var(--display);
+  font-size: clamp(40px, 4vw, 58px);
+  line-height: 0.95;
+  margin-bottom: 20px;
+}
+
+.prompt-info p {
+  font-size: 15px;
+  color: var(--dim);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+
+.prompt-pillars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.pillar {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--line2);
+}
+
+.pillar-marker {
+  width: 3px;
+  height: 100%;
+  min-height: 16px;
+  background: var(--amber);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pillar-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+
+.pillar-desc {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+/* Code block */
+.code-block {
+  background: var(--bg3);
+  border: 1px solid var(--line2);
+  position: relative;
+  overflow: hidden;
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--line2);
+  background: var(--bg4);
+}
+
+.code-filename {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.08em;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.code-lang {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.code-body {
+  padding: 20px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: var(--dim);
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 2;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.code-body::-webkit-scrollbar { width: 4px; height: 4px; }
+.code-body::-webkit-scrollbar-track { background: transparent; }
+.code-body::-webkit-scrollbar-thumb { background: var(--line2); }
+
+.tok-key    { color: var(--amber); }
+.tok-str    { color: #a8c7a0; }
+.tok-cmt    { color: var(--faint); font-style: italic; }
+.tok-fn     { color: #8ab4d4; }
+.tok-white  { color: var(--white); }
+
+/* ══════════════════════════════════════════════
+   04 — DEMO INTERACTIVO
+══════════════════════════════════════════════ */
+.demo-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
+.demo-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 4vw, 60px);
+  line-height: 0.95;
+}
+
+.demo-subtitle {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: 0.06em;
+  text-align: right;
+  line-height: 1.6;
+}
+
+.demo-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--line);
+}
+
+/* Input panel */
+.demo-panel {
+  background: var(--bg2);
+  display: flex;
+  flex-direction: column;
+}
+
+.demo-panel-header {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.demo-panel-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: flex; align-items: center; gap: 8px;
+}
+.demo-panel-title::before {
+  content: '';
+  width: 3px; height: 12px;
+  background: var(--white);
+}
+
+.demo-panel-body { padding: 20px; flex: 1; }
+
+textarea.demo-input {
+  width: 100%;
+  height: 240px;
+  background: var(--bg);
+  border: 1px solid var(--line2);
+  color: var(--white);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 16px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+}
+textarea.demo-input:focus { border-color: var(--white); }
+textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
+
+.demo-presets {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.preset-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border: 1px solid var(--line2);
+  color: var(--dim);
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.preset-btn:hover { border-color: var(--white); color: var(--white); }
+
+.demo-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.demo-model-selector {
+  display: flex;
+  gap: 6px;
+}
+
+.model-opt {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--line2);
+  color: var(--dim);
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.model-opt.selected {
+  border-color: var(--white);
+  color: var(--white);
+  background: rgba(255,255,255,0.05);
+}
+
+.btn-run {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: var(--white);
+  border: none;
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-run:hover { background: #fff; letter-spacing: 0.2em; }
+.btn-run:disabled { opacity: 0.35; cursor: not-allowed; letter-spacing: 0.14em; }
+
+.spinner-btn {
+  width: 12px; height: 12px;
+  border: 1.5px solid rgba(0,0,0,0.2);
+  border-top-color: var(--bg);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: none;
+}
+.btn-run.loading .spinner-btn { display: block; }
+.btn-run.loading .btn-run-label { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Output panel */
+.output-panel {
+  background: var(--bg2);
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+}
+
+/* AI progress log */
+.ai-log {
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+  border-bottom: 1px solid transparent;
+}
+.ai-log.open {
+  max-height: 100px;
+  padding: 14px 20px;
+  border-bottom-color: var(--line);
+}
+.log-line {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  margin-bottom: 5px;
+  opacity: 0;
+  animation: up 0.25s ease forwards;
+}
+.log-line:last-child { margin-bottom: 0; }
+.ld {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--faint); flex-shrink: 0;
+}
+.ld.ok  { background: var(--green); }
+.ld.sp  { border: 1px solid var(--dim); border-top-color: var(--white); background: transparent; animation: spin 0.6s linear infinite; }
+.ld.err { background: var(--red); }
+
+/* Results table */
+.results-wrap { flex: 1; overflow: auto; }
+
+.results-table { width: 100%; border-collapse: collapse; }
+.results-table th {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  position: sticky; top: 0;
+  background: var(--bg2);
+}
+.results-table td {
+  padding: 13px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--dim);
+}
+.results-table tr:last-child td { border-bottom: none; }
+.results-table tr:hover td { background: rgba(255,255,255,0.02); }
+.td-n { color: var(--faint); width: 36px; }
+.td-tipo { color: var(--white); width: 150px; font-weight: 500; }
+
+.badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid;
+}
+.b-eq   { color: var(--dim);   border-color: var(--line2); }
+.b-cine { color: var(--amber); border-color: rgba(212,168,67,.4); background: rgba(212,168,67,.05); }
+.b-din  { color: var(--green); border-color: rgba(77,184,122,.4); background: rgba(77,184,122,.05); }
+.b-doc  { color: #7ab0d4;      border-color: rgba(122,176,212,.4); background: rgba(122,176,212,.05); }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 320px;
+  gap: 12px;
+}
+.empty-state p {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+  letter-spacing: 0.1em;
+}
+
+/* JSON raw view */
+.json-toggle {
+  padding: 10px 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.json-toggle-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: none;
+  border: 1px solid var(--line2);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.json-toggle-btn:hover { color: var(--white); border-color: var(--white); }
+.json-raw {
+  display: none;
+  margin: 0 20px 20px;
+  padding: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line2);
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--dim);
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.json-raw.visible { display: block; }
+
+/* ── row flash ── */
+@keyframes row-flash {
+  from { background: rgba(77,184,122,0.1); }
+  to   { background: transparent; }
+}
+.r-new td { animation: row-flash 2s ease forwards; }
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+.footer-bar {
+  border-top: 1px solid var(--line);
+  padding: 32px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-logo {
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--white);
+}
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 0.1em;
+}
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+#toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 12px 18px;
+  background: var(--bg3);
+  border: 1px solid var(--line2);
+  border-left: 3px solid var(--line2);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  max-width: 380px;
+}
+#toast.show    { opacity: 1; transform: translateY(0); }
+#toast.success { border-left-color: var(--green); }
+#toast.error   { border-left-color: var(--red); color: var(--red); }
+#toast.info    { border-left-color: var(--amber); }
+
+/* ══════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════ */
+@keyframes up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  nav { padding: 0 24px; }
+  .hero { padding: 52px 24px 64px; }
+  .section { padding: 72px 24px; }
+  .section-sep { margin: 0 24px; }
+  .prop-grid { grid-template-columns: 1fr; gap: 40px; }
+  .flow-steps { grid-template-columns: 1fr 1fr; }
+  .flow-step:nth-child(2) { border-right: 1px solid var(--line2); }
+  .flow-arrow { display: none; }
+  .prompt-grid { grid-template-columns: 1fr; }
+  .demo-layout { grid-template-columns: 1fr; }
+  .demo-header { flex-direction: column; align-items: flex-start; }
+  .footer-bar { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-badge">S23</div>
+    Studio23 × Script Intelligence
+  </a>
+  <ul class="nav-links">
+    <li><a href="#propuesta">Propuesta</a></li>
+    <li><a href="#arquitectura">Arquitectura</a></li>
+    <li><a href="#prompt">Prompt</a></li>
+    <li><a href="#demo">Demo</a></li>
+  </ul>
+  <div class="nav-tag">Propuesta Técnica 2025</div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-bg-num" aria-hidden="true">AI</div>
+
+  <p class="hero-eyebrow">Studio23 · Propuesta de automatización</p>
+  <h1 class="hero-title">
+    SCRIPT<br>
+    <em>INTELLIGENCE</em>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      Un sistema de <strong>automatización con IA</strong> construido específicamente para el workflow de producción de Studio23. Del guion al desglose técnico de planos en segundos, usando <strong>Claude API + prompt engineering</strong>.
+    </p>
+    <a href="#demo" class="hero-cta">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 3v10M3 8l5 5 5-5"/>
+      </svg>
+      Ver demo en vivo
+    </a>
+  </div>
+</section>
+
+<div class="section-sep"></div>
+
+<!-- ═══ 01 PROPUESTA ═══ -->
+<section class="section" id="propuesta">
+  <div class="label-row">
+    <span class="label-num">01</span>
+    <span class="label-text">La propuesta</span>
+  </div>
+
+  <div class="prop-grid reveal">
+    <div>
+      <h2 class="prop-title">QUÉ RESUELVE ESTE SISTEMA</h2>
+      <p class="prop-body">
+        El desglose técnico de un guion es uno de los procesos más costosos en preproducción. Hoy requiere un Director de Fotografía o un Asistente de Dirección leyendo escena por escena para definir tipo de plano, equipo y tono visual.
+      </p>
+      <p class="prop-body">
+        <strong>Script Intelligence automatiza ese proceso.</strong> Un modelo de lenguaje entrenado con criterio cinematográfico analiza el guion y devuelve un desglose estructurado listo para producción — en segundos, no en horas.
+      </p>
+      <p class="prop-body">
+        El sistema es agnóstico al formato: funciona igual para un spot publicitario de 30 segundos que para un largometraje.
+      </p>
+    </div>
+
+    <div class="prop-skills">
+      <div class="skill-row">
+        <span class="skill-idx">01</span>
+        <div>
+          <div class="skill-name">Claude / OpenAI API</div>
+          <div class="skill-desc">Integración directa con modelos de lenguaje para análisis semántico de guiones</div>
+        </div>
+        <span class="skill-badge active">Activo</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-idx">02</span>
+        <div>
+          <div class="skill-name">Prompt Engineering</div>
+          <div class="skill-desc">System prompt especializado en terminología audiovisual profesional</div>
+        </div>
+        <span class="skill-badge active">Activo</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-idx">03</span>
+        <div>
+          <div class="skill-name">Automatización de workflow</div>
+          <div class="skill-desc">Pipeline guion → análisis → estructura de datos → persistencia en DB</div>
+        </div>
+        <span class="skill-badge active">Activo</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-idx">04</span>
+        <div>
+          <div class="skill-name">Structured output</div>
+          <div class="skill-desc">JSON tipado con schema estricto para integración directa con sistemas de producción</div>
+        </div>
+        <span class="skill-badge active">Activo</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-idx">05</span>
+        <div>
+          <div class="skill-name">Supabase / persistencia</div>
+          <div class="skill-desc">Cada desglose generado se almacena con metadata del proyecto</div>
+        </div>
+        <span class="skill-badge">Configurable</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-sep"></div>
+
+<!-- ═══ 02 ARQUITECTURA ═══ -->
+<section class="section" id="arquitectura">
+  <div class="label-row">
+    <span class="label-num">02</span>
+    <span class="label-text">Arquitectura del flujo</span>
+  </div>
+
+  <div class="reveal">
+    <h2 class="arch-title">CÓMO FUNCIONA</h2>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-num">PASO 01</div>
+        <div class="flow-step-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M2 4h12M2 8h8M2 12h5"/>
+          </svg>
+        </div>
+        <div class="flow-step-name">Input del guion</div>
+        <div class="flow-step-desc">El operador pega el texto del guion en la interfaz. Puede ser guion técnico, literario o descripción de escenas.</div>
+        <div class="flow-tech">Frontend UI</div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-num">PASO 02</div>
+        <div class="flow-step-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="8" cy="8" r="5"/><path d="M8 5v3l2 2"/>
+          </svg>
+        </div>
+        <div class="flow-step-name">Construcción del prompt</div>
+        <div class="flow-step-desc">El sistema combina el system prompt especializado con el texto del guion y el formato del proyecto.</div>
+        <div class="flow-tech">Prompt Engineering</div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-num">PASO 03</div>
+        <div class="flow-step-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M8 1l1.8 4.4H14l-3.7 2.7 1.4 4.4L8 10 4.3 12.5l1.4-4.4L2 5.4h4.2z"/>
+          </svg>
+        </div>
+        <div class="flow-step-name">Claude API</div>
+        <div class="flow-step-desc">Llamada a claude-sonnet. El modelo analiza semánticamente el guion y genera el desglose con criterio cinematográfico.</div>
+        <div class="flow-tech">Claude / OpenAI</div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-arrow">→</div>
+        <div class="flow-step-num">PASO 04</div>
+        <div class="flow-step-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2">
+            <rect x="2" y="2" width="12" height="12" rx="1"/>
+            <path d="M5 6h6M5 9h4"/>
+          </svg>
+        </div>
+        <div class="flow-step-name">Parse + validación</div>
+        <div class="flow-step-desc">La respuesta se parsea como JSON tipado. Se validan tipos de plano, equipo y vibe contra vocabularios controlados.</div>
+        <div class="flow-tech">Structured Output</div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num">PASO 05</div>
+        <div class="flow-step-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2">
+            <ellipse cx="8" cy="5" rx="6" ry="2.5"/>
+            <path d="M2 5v6c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5V5"/>
+            <path d="M2 8c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5"/>
+          </svg>
+        </div>
+        <div class="flow-step-name">Persistencia</div>
+        <div class="flow-step-desc">Cada plano se inserta en Supabase con metadata del proyecto, responsable y timestamp. Un registro por plano.</div>
+        <div class="flow-tech">Supabase / REST</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-sep"></div>
+
+<!-- ═══ 03 SYSTEM PROMPT ═══ -->
+<section class="section" id="prompt">
+  <div class="label-row">
+    <span class="label-num">03</span>
+    <span class="label-text">Prompt engineering</span>
+  </div>
+
+  <div class="prompt-grid reveal">
+    <div class="prompt-info">
+      <h2>EL PROMPT QUE LO HACE FUNCIONAR</h2>
+      <p>
+        El corazón del sistema. El system prompt no es genérico — fue diseñado con <strong>vocabulario controlado específico</strong> de producción audiovisual para forzar outputs consistentes y parseable.
+      </p>
+      <p>
+        Tres decisiones técnicas clave que determinan la calidad del output:
+      </p>
+
+      <div class="prompt-pillars">
+        <div class="pillar">
+          <div class="pillar-marker"></div>
+          <div>
+            <div class="pillar-title">Role + dominio</div>
+            <div class="pillar-desc">El modelo se posiciona como asistente técnico de Studio23, no como IA genérica. El contexto de la productora mejora la relevancia.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-marker"></div>
+          <div>
+            <div class="pillar-title">Vocabulario controlado</div>
+            <div class="pillar-desc">Se le pasan enums explícitos de tipos de plano, equipos y vibes. Esto elimina la variabilidad del output y permite parseo directo.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-marker"></div>
+          <div>
+            <div class="pillar-title">JSON-only output</div>
+            <div class="pillar-desc">Instrucción estricta de no agregar texto, markdown ni preámbulos. El modelo devuelve únicamente el array JSON.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-filename">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M4 6l-2 2 2 2M12 6l2 2-2 2M9 4l-2 8"/>
+          </svg>
+          system_prompt.js
+        </span>
+        <span class="code-lang">Prompt</span>
+      </div>
+      <div class="code-body"><span class="tok-key">const</span> <span class="tok-fn">SYSTEM_PROMPT</span> = <span class="tok-str">`
+<span class="tok-white">Sos un asistente técnico de producción audiovisual</span>
+<span class="tok-white">para Studio23, una productora argentina de alto nivel.</span>
+
+<span class="tok-white">Tu tarea: analizar guiones y devolver un desglose</span>
+<span class="tok-white">técnico de planos cinematográficos.</span>
+
+<span class="tok-cmt">// ── OUTPUT CONSTRAINT ──────────────────────────</span>
+<span class="tok-white">Respondé ÚNICAMENTE con un JSON array válido.</span>
+<span class="tok-white">Sin texto adicional. Sin markdown. Sin bloques de código.</span>
+
+<span class="tok-cmt">// ── SCHEMA ──────────────────────────────────────</span>
+[{
+  <span class="tok-str">"nro_plano"</span>:          <span class="tok-fn">number</span>,
+  <span class="tok-str">"tipo_de_plano"</span>:      <span class="tok-fn">enum(TIPOS)</span>,
+  <span class="tok-str">"descripcion_visual"</span>: <span class="tok-fn">string</span>,
+  <span class="tok-str">"equipo_sugerido"</span>:    <span class="tok-fn">enum(EQUIPOS)</span>,
+  <span class="tok-str">"vibe"</span>:               <span class="tok-fn">enum(VIBES)</span>
+}]
+
+<span class="tok-cmt">// ── VOCABULARIO CONTROLADO ───────────────────────</span>
+<span class="tok-key">TIPOS</span>: Plano Detalle | Primer Plano | Plano Medio
+      | Plano Americano | Plano General | Plano Secuencia
+      | Plano Subjetivo | Cenital | Contrapicado | Picado
+
+<span class="tok-key">EQUIPOS</span>: Trípode | Gimbal | Steadicam | Grúa | Dolly
+         | Dron | Cámara en mano | Slider | Monopié
+
+<span class="tok-key">VIBES</span>: Cinematográfico | Dinámico | Documental
+       | Editorial | Intimista | Épico | Tenso
+       | Contemplativo | Verité | Onírico
+
+<span class="tok-cmt">// ── INSTRUCCIÓN FINAL ───────────────────────────</span>
+<span class="tok-white">Cada escena o momento diferenciado = un plano.</span>
+<span class="tok-white">Sé preciso y técnico. Solo JSON.</span>
+`</span>;</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-sep"></div>
+
+<!-- ═══ 04 DEMO ═══ -->
+<section class="section" id="demo">
+  <div class="label-row">
+    <span class="label-num">04</span>
+    <span class="label-text">Demo interactivo</span>
+  </div>
+
+  <div class="demo-header reveal">
+    <h2 class="demo-title">PROBALO EN VIVO</h2>
+    <div class="demo-subtitle">
+      Usá un guion de ejemplo o escribí el tuyo.<br>
+      La IA genera el desglose técnico en tiempo real.
+    </div>
+  </div>
+
+  <div class="demo-layout reveal">
+
+    <!-- INPUT -->
+    <div class="demo-panel">
+      <div class="demo-panel-header">
+        <span class="demo-panel-title">Input — Guion</span>
+        <span style="font-family:var(--mono);font-size:9px;color:var(--faint)" id="wc">0 palabras</span>
+      </div>
+      <div class="demo-panel-body">
+        <div class="demo-presets">
+          <button class="preset-btn" data-preset="publicidad">Spot publicitario</button>
+          <button class="preset-btn" data-preset="videoclip">Videoclip</button>
+          <button class="preset-btn" data-preset="corto">Cortometraje</button>
+        </div>
+        <textarea class="demo-input" id="demoGuion" placeholder="Pegá el guion o elegí un ejemplo arriba..."></textarea>
+      </div>
+      <div class="demo-footer">
+        <div class="demo-model-selector">
+          <button class="model-opt selected" data-model="claude-sonnet-4-20250514">Claude Sonnet</button>
+          <button class="model-opt" data-model="gpt-4o">GPT-4o</button>
+        </div>
+        <button class="btn-run" id="btnRun">
+          <span class="btn-run-label">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="vertical-align:middle;margin-right:4px">
+              <path d="M8 1l1.8 4.4H14l-3.7 2.7 1.4 4.4L8 10 4.3 12.5l1.4-4.4L2 5.4h4.2z"/>
+            </svg>
+            Analizar guion
+          </span>
+          <div class="spinner-btn"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="demo-panel output-panel">
+      <div class="demo-panel-header">
+        <span class="demo-panel-title">Output — Planos detectados</span>
+        <span class="badge b-eq" id="planoCount" style="font-size:9px">0 planos</span>
+      </div>
+
+      <div class="ai-log" id="aiLog"></div>
+
+      <div class="results-wrap" id="resultsWrap">
+        <div class="empty-state" id="emptyState">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--faint)">
+            <path d="M8 1l1.8 4.4H14l-3.7 2.7 1.4 4.4L8 10 4.3 12.5l1.4-4.4L2 5.4h4.2z"/>
+          </svg>
+          <p>Esperando análisis</p>
+        </div>
+        <table class="results-table" id="resultsTable" style="display:none">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Tipo de plano</th>
+              <th>Descripción visual</th>
+              <th>Equipo</th>
+              <th>Vibe</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="json-toggle" id="jsonToggleBar" style="display:none">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--faint);letter-spacing:0.08em">JSON RAW OUTPUT</span>
+        <button class="json-toggle-btn" id="jsonToggleBtn">Ver JSON</button>
+      </div>
+      <pre class="json-raw" id="jsonRaw"></pre>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-sep"></div>
+
+<!-- FOOTER -->
+<footer class="footer-bar">
+  <div class="footer-logo">STUDIO23</div>
+  <div class="footer-copy">Script Intelligence · Propuesta técnica 2025 · Claude API + Prompt Engineering</div>
+</footer>
+
+<div id="toast"></div>
+
+<!-- ════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════ -->
+<script>
+/* ══════════════════════════════════════════════
+   SYSTEM PROMPT
+══════════════════════════════════════════════ */
+const SYSTEM_PROMPT = `Sos un asistente técnico de producción audiovisual para Studio23, una productora argentina de alto nivel.
+Tu tarea: analizar guiones y devolver un desglose técnico de planos cinematográficos.
+
+Respondé ÚNICAMENTE con un JSON array válido. Sin texto adicional. Sin markdown. Sin bloques de código.
+
+Schema por objeto:
+{
+  "nro_plano": number,
+  "tipo_de_plano": string (del vocabulario TIPOS),
+  "descripcion_visual": string (descripción técnica del encuadre y acción visual),
+  "equipo_sugerido": string (del vocabulario EQUIPOS),
+  "vibe": string (del vocabulario VIBES)
+}
+
+TIPOS válidos: Plano Detalle, Primer Plano, Plano Medio, Plano Americano, Plano General, Plano Secuencia, Plano Subjetivo, Plano Cenital, Plano Contrapicado, Plano Picado
+
+EQUIPOS válidos: Trípode, Gimbal, Steadicam, Grúa, Dolly, Dron, Cámara en mano, Slider, Monopié
+
+VIBES válidos: Cinematográfico, Dinámico, Documental, Editorial, Intimista, Épico, Tenso, Contemplativo, Verité, Onírico
+
+Instrucciones: Cada escena o momento diferenciado = un plano separado. Sé preciso y técnico. Solo JSON.`;
+
+/* ══════════════════════════════════════════════
+   PRESETS
+══════════════════════════════════════════════ */
+const PRESETS = {
+  publicidad: `SPOT PUBLICITARIO — Nike AR / 30"
+
+ESCENA 1 — Exterior / Estadio / Amanecer
+Un par de zapatillas en el piso. Primer plano del cordón que se ata solo.
+La cámara sube lentamente revelando a un atleta de 20 años mirando el horizonte.
+
+ESCENA 2 — Interior / Vestuario
+El atleta camina entre sus compañeros. Nadie lo mira. Él sigue de frente.
+Fondo desfocado. Ambiente de silencio tenso.
+
+ESCENA 3 — Exterior / Pista de atletismo
+Plano amplio del estadio vacío al amanecer. El atleta empieza a correr.
+Cámara siguiéndolo desde atrás a nivel de suelo.
+
+ESCENA 4 — Close up
+Detalle de las zapatillas golpeando el asfalto. Agua salpicando.
+Corte rápido al rostro del atleta. Sudor. Determinación.
+
+ESCENA 5 — Logo
+Pantalla negra. Logo Nike. Tagline: "Just Do It."`,
+
+  videoclip: `VIDEOCLIP — Artista urbano / Tema: "Medianoche"
+
+INTRO
+La ciudad de noche desde el aire. Rascacielos con luces. 
+El artista en la azotea de un edificio, solo, mirando hacia abajo.
+
+VERSO 1
+El artista camina por una calle vacía. Farolas. Lluvia suave.
+Plano lateral siguiendo el movimiento. El artista canta mirando a cámara.
+
+PRE-CORO
+Planos rápidos intercalados: manos escribiendo, pantalla de celular, 
+una ventana iluminada en edificio oscuro. Montaje rítmico.
+
+CORO
+El artista en el centro de una pista de baile vacía. 
+Luces estroboscópicas. Bailarines aparecen desde los costados.
+Cámara girando alrededor del artista.
+
+PUENTE
+Plano íntimo. El artista sentado, solo, micrófono cerca.
+Iluminación dramática, una sola fuente de luz lateral.`,
+
+  corto: `CORTOMETRAJE — "El Último Ensayo"
+
+SECUENCIA 1 — Sala de ensayo / Interior / Tarde
+Una pianista de 30 años frente a un piano de cola.
+La sala está vacía. Luz filtrándose por ventanas altas.
+Ella toca. Se equivoca. Para.
+
+SECUENCIA 2
+Sus manos sobre las teclas, inmóviles.
+Close up de sus dedos. Tensión.
+
+SECUENCIA 3
+Se levanta y camina al fondo de la sala.
+Mira por la ventana. La ciudad afuera.
+Plano desde atrás. Silueta contra la luz.
+
+SECUENCIA 4
+Vuelve al piano. Esta vez no duda.
+Toca la primera nota. Fade out lento.
+La música continúa sobre negro.`
+};
+
+/* ══════════════════════════════════════════════
+   PRESETS BUTTONS
+══════════════════════════════════════════════ */
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.preset;
+    document.getElementById('demoGuion').value = PRESETS[key] || '';
+    updateWc();
+  });
+});
+
+/* ══════════════════════════════════════════════
+   MODEL SELECTOR
+══════════════════════════════════════════════ */
+let selectedModel = 'claude-sonnet-4-20250514';
+document.querySelectorAll('.model-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.model-opt').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedModel = btn.dataset.model;
+  });
+});
+
+/* ══════════════════════════════════════════════
+   WORD COUNT
+══════════════════════════════════════════════ */
+function updateWc() {
+  const w = document.getElementById('demoGuion').value.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('wc').textContent = w + (w === 1 ? ' palabra' : ' palabras');
+}
+document.getElementById('demoGuion').addEventListener('input', updateWc);
+
+/* ══════════════════════════════════════════════
+   API CALL — proxy via /api/analyze (Vercel serverless)
+   La API key vive en el servidor, nunca en el front.
+══════════════════════════════════════════════ */
+async function callClaude(guion) {
+  const res = await fetch('/api/analyze', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ guion }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || `Error del servidor (${res.status})`);
+  }
+
+  return { planos: data.planos, raw: data.raw };
+}
+
+/* ══════════════════════════════════════════════
+   LOG HELPERS
+══════════════════════════════════════════════ */
+function logOpen()  { document.getElementById('aiLog').classList.add('open'); }
+function logClose() { document.getElementById('aiLog').classList.remove('open'); }
+function logClear() { document.getElementById('aiLog').innerHTML = ''; }
+
+function logLine(text, state = 'sp') {
+  const log = document.getElementById('aiLog');
+  const el  = document.createElement('div');
+  el.className = 'log-line';
+  el.innerHTML = `<span class="ld ${state}"></span><span>${text}</span>`;
+  log.appendChild(el);
+  return el;
+}
+
+function logUpd(el, text, state) {
+  el.querySelector('.ld').className = `ld ${state}`;
+  el.querySelector('span:last-child').textContent = text;
+}
+
+/* ══════════════════════════════════════════════
+   RENDER RESULTS
+══════════════════════════════════════════════ */
+const VIBE_CLS = {
+  'Cinematográfico': 'b-cine',
+  'Dinámico':        'b-din',
+  'Documental':      'b-doc',
+  'Épico':           'b-cine',
+  'Tenso':           'b-din',
+};
+function vCls(v) { return VIBE_CLS[v] || 'b-eq'; }
+function esc(s)  { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderResults(planos, rawJson) {
+  document.getElementById('emptyState').style.display   = 'none';
+  document.getElementById('resultsTable').style.display = 'table';
+  document.getElementById('jsonToggleBar').style.display = 'flex';
+  document.getElementById('planoCount').textContent = `${planos.length} planos`;
+
+  document.getElementById('resultsBody').innerHTML = planos.map((p, i) => `
+    <tr class="r-new" style="animation-delay:${i * 60}ms">
+      <td class="td-n">${String(p.nro_plano).padStart(2,'0')}</td>
+      <td class="td-tipo">${esc(p.tipo_de_plano)}</td>
+      <td style="color:var(--dim);max-width:260px">${esc(p.descripcion_visual)}</td>
+      <td><span class="badge b-eq">${esc(p.equipo_sugerido)}</span></td>
+      <td><span class="badge ${vCls(p.vibe)}">${esc(p.vibe)}</span></td>
+    </tr>
+  `).join('');
+
+  document.getElementById('jsonRaw').textContent = rawJson;
+}
+
+/* ══════════════════════════════════════════════
+   JSON TOGGLE
+══════════════════════════════════════════════ */
+document.getElementById('jsonToggleBtn').addEventListener('click', () => {
+  const el  = document.getElementById('jsonRaw');
+  const btn = document.getElementById('jsonToggleBtn');
+  const visible = el.classList.toggle('visible');
+  btn.textContent = visible ? 'Ocultar JSON' : 'Ver JSON';
+});
+
+/* ══════════════════════════════════════════════
+   RUN BUTTON
+══════════════════════════════════════════════ */
+document.getElementById('btnRun').addEventListener('click', async () => {
+  const guion = document.getElementById('demoGuion').value.trim();
+  if (!guion) { toast('Ingresá o elegí un guion de ejemplo.', 'error'); return; }
+
+  const btn = document.getElementById('btnRun');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  logClear();
+  logOpen();
+  const l1 = logLine('Enviando a ' + (selectedModel.startsWith('gpt') ? 'GPT-4o → Claude (demo)' : 'Claude Sonnet') + '...');
+
+  try {
+    await new Promise(r => setTimeout(r, 120));
+    const { planos, raw } = await callClaude(guion);
+
+    logUpd(l1, `Respuesta recibida — ${planos.length} planos detectados`, 'ok');
+    const l2 = logLine('Construyendo tabla...', 'sp');
+    await new Promise(r => setTimeout(r, 180));
+
+    renderResults(planos, raw);
+    logUpd(l2, 'Tabla lista', 'ok');
+    setTimeout(logClose, 2200);
+
+    toast(`${planos.length} planos generados correctamente.`, 'success');
+  } catch (err) {
+    console.error(err);
+    logUpd(l1, `Error: ${err.message}`, 'err');
+    toast(err.message.includes('401') || err.message.includes('403')
+      ? 'Demo en modo offline — la API key no está configurada en este deploy.'
+      : `Error: ${err.message}`, 'error');
+
+    // Fallback demo data so the UI still impresses
+    const demoPlanos = getDemoPlanos(guion);
+    const l3 = logLine('Cargando demo data...', 'sp');
+    await new Promise(r => setTimeout(r, 400));
+    renderResults(demoPlanos, JSON.stringify(demoPlanos, null, 2));
+    logUpd(l3, 'Demo data lista (sin API key)', 'ok');
+    setTimeout(logClose, 2200);
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+});
+
+/* ══════════════════════════════════════════════
+   DEMO FALLBACK DATA (cuando no hay API key)
+══════════════════════════════════════════════ */
+function getDemoPlanos(guion) {
+  const isClip    = guion.toLowerCase().includes('videoclip') || guion.toLowerCase().includes('artista');
+  const isCorto   = guion.toLowerCase().includes('cortometraje') || guion.toLowerCase().includes('piano');
+
+  if (isCorto) return [
+    { nro_plano:1, tipo_de_plano:"Plano General",    descripcion_visual:"Sala de ensayo vacía. Luz natural filtrándose por ventanas altas. La pianista frente al piano de cola, aislada en el espacio.", equipo_sugerido:"Trípode",    vibe:"Intimista" },
+    { nro_plano:2, tipo_de_plano:"Plano Medio",      descripcion_visual:"La pianista toca. Su postura concentrada. La cámara estática captura el momento en que se equivoca y para.",                 equipo_sugerido:"Trípode",    vibe:"Tenso" },
+    { nro_plano:3, tipo_de_plano:"Plano Detalle",    descripcion_visual:"Close up de las manos sobre las teclas, inmóviles. Tensión contenida. Foco en los dedos.",                                   equipo_sugerido:"Monopié",    vibe:"Cinematográfico" },
+    { nro_plano:4, tipo_de_plano:"Plano Americano",  descripcion_visual:"La pianista se levanta y camina hacia el fondo. Movimiento libre, cámara la sigue suavemente.",                              equipo_sugerido:"Gimbal",     vibe:"Contemplativo" },
+    { nro_plano:5, tipo_de_plano:"Plano Contrapicado","descripcion_visual":"Silueta de la pianista contra la ventana iluminada. Ciudad de fondo. Composición geométrica fuerte.",                    equipo_sugerido:"Trípode",    vibe:"Cinematográfico" },
+    { nro_plano:6, tipo_de_plano:"Primer Plano",     descripcion_visual:"Rostro de la pianista tomando la decisión. Determinación. La primera nota que ejecuta correctamente.",                       equipo_sugerido:"Trípode",    vibe:"Épico" },
+  ];
+
+  if (isClip) return [
+    { nro_plano:1, tipo_de_plano:"Plano Cenital",    descripcion_visual:"Vista aérea de la ciudad de noche. Rascacielos iluminados. Movimiento lento de dron sobre el skyline.",                    equipo_sugerido:"Dron",       vibe:"Editorial" },
+    { nro_plano:2, tipo_de_plano:"Plano General",    descripcion_visual:"El artista en la azotea, silueta contra las luces de la ciudad. Gran angular. Sensación de soledad.",                       equipo_sugerido:"Trípode",    vibe:"Cinematográfico" },
+    { nro_plano:3, tipo_de_plano:"Plano Secuencia",  descripcion_visual:"Travelling lateral siguiendo al artista en la calle mojada. Farolas reflejadas en el asfalto. Lluvia suave.",              equipo_sugerido:"Steadicam",  vibe:"Verité" },
+    { nro_plano:4, tipo_de_plano:"Primer Plano",     descripcion_visual:"Artista mirando a cámara cantando. Bokeh de farolas detrás. Conexión directa con el espectador.",                           equipo_sugerido:"Trípode",    vibe:"Intimista" },
+    { nro_plano:5, tipo_de_plano:"Plano Detalle",    descripcion_visual:"Montaje rápido: manos, teléfono, ventana iluminada. Cortes al ritmo del pre-coro.",                                         equipo_sugerido:"Monopié",    vibe:"Dinámico" },
+    { nro_plano:6, tipo_de_plano:"Plano Americano",  descripcion_visual:"Artista en pista de baile vacía. Luces estroboscópicas. Cámara circular comenzando a moverse.",                             equipo_sugerido:"Gimbal",     vibe:"Épico" },
+  ];
+
+  return [
+    { nro_plano:1, tipo_de_plano:"Plano Detalle",    descripcion_visual:"Macro del producto / objeto central de la narrativa. Foco nítido sobre superficie, fondo completamente desfocado.",        equipo_sugerido:"Monopié",    vibe:"Editorial" },
+    { nro_plano:2, tipo_de_plano:"Primer Plano",     descripcion_visual:"Rostro del protagonista en el centro del encuadre. Expresión de concentración. Luz lateral dramática.",                     equipo_sugerido:"Trípode",    vibe:"Cinematográfico" },
+    { nro_plano:3, tipo_de_plano:"Plano Americano",  descripcion_visual:"Protagonista en movimiento. Cámara siguiendo la acción de forma fluida. Entorno reconocible en contexto.",                  equipo_sugerido:"Gimbal",     vibe:"Dinámico" },
+    { nro_plano:4, tipo_de_plano:"Plano General",    descripcion_visual:"Vista completa de la locación. Personajes distribuidos en diferentes profundidades. Establece el espacio.",                 equipo_sugerido:"Trípode",    vibe:"Cinematográfico" },
+    { nro_plano:5, tipo_de_plano:"Plano Contrapicado","descripcion_visual":"Ángulo bajo engrandeciendo la figura del protagonista. Cielo o fondo arquitectónico de contraste.",                     equipo_sugerido:"Trípode",    vibe:"Épico" },
+  ];
+}
+
+/* ══════════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════════ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show ${type}`;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.className = '', 5000);
+}
+</script>
+</body>
+</html>
