@@ -126,7 +126,6 @@ nav {
   overflow: hidden;
 }
 
-/* big background number */
 .hero-bg-num {
   position: absolute;
   top: 50%; left: 50%;
@@ -472,7 +471,6 @@ nav {
   color: var(--dim);
 }
 
-/* Code block */
 .code-block {
   background: var(--bg3);
   border: 1px solid var(--line2);
@@ -561,7 +559,6 @@ nav {
   background: var(--line);
 }
 
-/* Input panel */
 .demo-panel {
   background: var(--bg2);
   display: flex;
@@ -692,7 +689,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
 .btn-run.loading .btn-run-label { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Output panel */
 .output-panel {
   background: var(--bg2);
   display: flex;
@@ -700,7 +696,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
   min-height: 480px;
 }
 
-/* AI progress log */
 .ai-log {
   padding: 0 20px;
   max-height: 0;
@@ -731,7 +726,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
 .ld.sp  { border: 1px solid var(--dim); border-top-color: var(--white); background: transparent; animation: spin 0.6s linear infinite; }
 .ld.err { background: var(--red); }
 
-/* Results table */
 .results-wrap { flex: 1; overflow: auto; }
 
 .results-table { width: 100%; border-collapse: collapse; }
@@ -792,7 +786,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
   letter-spacing: 0.1em;
 }
 
-/* JSON raw view */
 .json-toggle {
   padding: 10px 20px;
   border-top: 1px solid var(--line);
@@ -830,7 +823,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
 }
 .json-raw.visible { display: block; }
 
-/* ── row flash ── */
 @keyframes row-flash {
   from { background: rgba(77,184,122,0.1); }
   to   { background: transparent; }
@@ -883,7 +875,7 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
 #toast.show    { opacity: 1; transform: translateY(0); }
 #toast.success { border-left-color: var(--green); }
 #toast.error   { border-left-color: var(--red); color: var(--red); }
-#toast.info    { border-left-color: var(--amber); }
+#toast.info    { border-left-color: var(--amber); color: var(--amber); }
 
 /* ══════════════════════════════════════════════
    ANIMATIONS
@@ -939,7 +931,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
 <!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="hero-bg-num" aria-hidden="true">AI</div>
-
   <p class="hero-eyebrow">Studio23 · Propuesta de automatización</p>
   <h1 class="hero-title">
     SCRIPT<br>
@@ -1037,7 +1028,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
 
   <div class="reveal">
     <h2 class="arch-title">CÓMO FUNCIONA</h2>
-
     <div class="flow-steps">
       <div class="flow-step">
         <div class="flow-arrow">→</div>
@@ -1051,7 +1041,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
         <div class="flow-step-desc">El operador pega el texto del guion en la interfaz. Puede ser guion técnico, literario o descripción de escenas.</div>
         <div class="flow-tech">Frontend UI</div>
       </div>
-
       <div class="flow-step">
         <div class="flow-arrow">→</div>
         <div class="flow-step-num">PASO 02</div>
@@ -1064,7 +1053,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
         <div class="flow-step-desc">El sistema combina el system prompt especializado con el texto del guion y el formato del proyecto.</div>
         <div class="flow-tech">Prompt Engineering</div>
       </div>
-
       <div class="flow-step">
         <div class="flow-arrow">→</div>
         <div class="flow-step-num">PASO 03</div>
@@ -1077,7 +1065,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
         <div class="flow-step-desc">Llamada a claude-sonnet. El modelo analiza semánticamente el guion y genera el desglose con criterio cinematográfico.</div>
         <div class="flow-tech">Claude / OpenAI</div>
       </div>
-
       <div class="flow-step">
         <div class="flow-arrow">→</div>
         <div class="flow-step-num">PASO 04</div>
@@ -1091,7 +1078,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
         <div class="flow-step-desc">La respuesta se parsea como JSON tipado. Se validan tipos de plano, equipo y vibe contra vocabularios controlados.</div>
         <div class="flow-tech">Structured Output</div>
       </div>
-
       <div class="flow-step">
         <div class="flow-step-num">PASO 05</div>
         <div class="flow-step-icon">
@@ -1121,13 +1107,8 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
   <div class="prompt-grid reveal">
     <div class="prompt-info">
       <h2>EL PROMPT QUE LO HACE FUNCIONAR</h2>
-      <p>
-        El corazón del sistema. El system prompt no es genérico — fue diseñado con <strong>vocabulario controlado específico</strong> de producción audiovisual para forzar outputs consistentes y parseable.
-      </p>
-      <p>
-        Tres decisiones técnicas clave que determinan la calidad del output:
-      </p>
-
+      <p>El corazón del sistema. El system prompt no es genérico — fue diseñado con <strong>vocabulario controlado específico</strong> de producción audiovisual para forzar outputs consistentes y parseables.</p>
+      <p>Tres decisiones técnicas clave que determinan la calidad del output:</p>
       <div class="prompt-pillars">
         <div class="pillar">
           <div class="pillar-marker"></div>
@@ -1221,7 +1202,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
   </div>
 
   <div class="demo-layout reveal">
-
     <!-- INPUT -->
     <div class="demo-panel">
       <div class="demo-panel-header">
@@ -1289,7 +1269,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
       </div>
       <pre class="json-raw" id="jsonRaw"></pre>
     </div>
-
   </div>
 </section>
 
@@ -1303,9 +1282,6 @@ textarea.demo-input::placeholder { color: var(--faint); font-style: italic; }
 
 <div id="toast"></div>
 
-<!-- ════════════════════════════════════════════
-     JAVASCRIPT
-════════════════════════════════════════════ -->
 <script>
 /* ══════════════════════════════════════════════
    SYSTEM PROMPT
@@ -1325,9 +1301,7 @@ Schema por objeto:
 }
 
 TIPOS válidos: Plano Detalle, Primer Plano, Plano Medio, Plano Americano, Plano General, Plano Secuencia, Plano Subjetivo, Plano Cenital, Plano Contrapicado, Plano Picado
-
 EQUIPOS válidos: Trípode, Gimbal, Steadicam, Grúa, Dolly, Dron, Cámara en mano, Slider, Monopié
-
 VIBES válidos: Cinematográfico, Dinámico, Documental, Editorial, Intimista, Épico, Tenso, Contemplativo, Verité, Onírico
 
 Instrucciones: Cada escena o momento diferenciado = un plano separado. Sé preciso y técnico. Solo JSON.`;
@@ -1407,8 +1381,7 @@ La música continúa sobre negro.`
 ══════════════════════════════════════════════ */
 document.querySelectorAll('.preset-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    const key = btn.dataset.preset;
-    document.getElementById('demoGuion').value = PRESETS[key] || '';
+    document.getElementById('demoGuion').value = PRESETS[btn.dataset.preset] || '';
     updateWc();
   });
 });
@@ -1435,8 +1408,7 @@ function updateWc() {
 document.getElementById('demoGuion').addEventListener('input', updateWc);
 
 /* ══════════════════════════════════════════════
-   API CALL — proxy via /api/analyze (Vercel serverless)
-   La API key vive en el servidor, nunca en el front.
+   API CALL
 ══════════════════════════════════════════════ */
 async function callClaude(guion) {
   const res = await fetch('/api/analyze', {
@@ -1444,13 +1416,8 @@ async function callClaude(guion) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ guion }),
   });
-
   const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.error || `Error del servidor (${res.status})`);
-  }
-
+  if (!res.ok) throw new Error(data.error || `Error del servidor (${res.status})`);
   return { planos: data.planos, raw: data.raw };
 }
 
@@ -1493,7 +1460,6 @@ function renderResults(planos, rawJson) {
   document.getElementById('resultsTable').style.display = 'table';
   document.getElementById('jsonToggleBar').style.display = 'flex';
   document.getElementById('planoCount').textContent = `${planos.length} planos`;
-
   document.getElementById('resultsBody').innerHTML = planos.map((p, i) => `
     <tr class="r-new" style="animation-delay:${i * 60}ms">
       <td class="td-n">${String(p.nro_plano).padStart(2,'0')}</td>
@@ -1503,7 +1469,6 @@ function renderResults(planos, rawJson) {
       <td><span class="badge ${vCls(p.vibe)}">${esc(p.vibe)}</span></td>
     </tr>
   `).join('');
-
   document.getElementById('jsonRaw').textContent = rawJson;
 }
 
@@ -1535,33 +1500,22 @@ document.getElementById('btnRun').addEventListener('click', async () => {
   try {
     await new Promise(r => setTimeout(r, 120));
     const { planos, raw } = await callClaude(guion);
-
     logUpd(l1, `Respuesta recibida — ${planos.length} planos detectados`, 'ok');
     const l2 = logLine('Construyendo tabla...', 'sp');
     await new Promise(r => setTimeout(r, 180));
-
     renderResults(planos, raw);
     logUpd(l2, 'Tabla lista', 'ok');
     setTimeout(logClose, 2200);
-
     toast(`${planos.length} planos generados correctamente.`, 'success');
-} catch (err) {
-  const l3 = logLine('Cargando demo data...', 'sp');
-  await new Promise(r => setTimeout(r, 400));
-  const demoPlanos = getDemoPlanos(guion);
-  renderResults(demoPlanos, JSON.stringify(demoPlanos, null, 2));
-  logUpd(l3, 'Demo data lista', 'ok');
-  setTimeout(logClose, 2200);
-  toast('Modo demo — los resultados son simulados. Escribime para activar la integración real.', 'info');
-}
-
-    // Fallback demo data so the UI still impresses
-    const demoPlanos = getDemoPlanos(guion);
-    const l3 = logLine('Cargando demo data...', 'sp');
+  } catch (err) {
+    // ── FALLBACK: carga demo data sin mostrar error al usuario ──
+    const l2 = logLine('Cargando demo data...', 'sp');
     await new Promise(r => setTimeout(r, 400));
+    const demoPlanos = getDemoPlanos(guion);
     renderResults(demoPlanos, JSON.stringify(demoPlanos, null, 2));
-    logUpd(l3, 'Demo data lista (sin API key)', 'ok');
+    logUpd(l2, 'Demo data lista', 'ok');
     setTimeout(logClose, 2200);
+    toast('Modo demo — los resultados son simulados. Escribime para activar la integración real.', 'info');
   } finally {
     btn.disabled = false;
     btn.classList.remove('loading');
@@ -1569,36 +1523,36 @@ document.getElementById('btnRun').addEventListener('click', async () => {
 });
 
 /* ══════════════════════════════════════════════
-   DEMO FALLBACK DATA (cuando no hay API key)
+   DEMO FALLBACK DATA
 ══════════════════════════════════════════════ */
 function getDemoPlanos(guion) {
-  const isClip    = guion.toLowerCase().includes('videoclip') || guion.toLowerCase().includes('artista');
-  const isCorto   = guion.toLowerCase().includes('cortometraje') || guion.toLowerCase().includes('piano');
+  const isClip  = guion.toLowerCase().includes('videoclip') || guion.toLowerCase().includes('artista');
+  const isCorto = guion.toLowerCase().includes('cortometraje') || guion.toLowerCase().includes('piano');
 
   if (isCorto) return [
-    { nro_plano:1, tipo_de_plano:"Plano General",    descripcion_visual:"Sala de ensayo vacía. Luz natural filtrándose por ventanas altas. La pianista frente al piano de cola, aislada en el espacio.", equipo_sugerido:"Trípode",    vibe:"Intimista" },
-    { nro_plano:2, tipo_de_plano:"Plano Medio",      descripcion_visual:"La pianista toca. Su postura concentrada. La cámara estática captura el momento en que se equivoca y para.",                 equipo_sugerido:"Trípode",    vibe:"Tenso" },
-    { nro_plano:3, tipo_de_plano:"Plano Detalle",    descripcion_visual:"Close up de las manos sobre las teclas, inmóviles. Tensión contenida. Foco en los dedos.",                                   equipo_sugerido:"Monopié",    vibe:"Cinematográfico" },
-    { nro_plano:4, tipo_de_plano:"Plano Americano",  descripcion_visual:"La pianista se levanta y camina hacia el fondo. Movimiento libre, cámara la sigue suavemente.",                              equipo_sugerido:"Gimbal",     vibe:"Contemplativo" },
-    { nro_plano:5, tipo_de_plano:"Plano Contrapicado","descripcion_visual":"Silueta de la pianista contra la ventana iluminada. Ciudad de fondo. Composición geométrica fuerte.",                    equipo_sugerido:"Trípode",    vibe:"Cinematográfico" },
-    { nro_plano:6, tipo_de_plano:"Primer Plano",     descripcion_visual:"Rostro de la pianista tomando la decisión. Determinación. La primera nota que ejecuta correctamente.",                       equipo_sugerido:"Trípode",    vibe:"Épico" },
+    { nro_plano:1, tipo_de_plano:"Plano General",     descripcion_visual:"Sala de ensayo vacía. Luz natural filtrándose por ventanas altas. La pianista frente al piano de cola, aislada en el espacio.", equipo_sugerido:"Trípode",   vibe:"Intimista" },
+    { nro_plano:2, tipo_de_plano:"Plano Medio",       descripcion_visual:"La pianista toca. Su postura concentrada. La cámara estática captura el momento en que se equivoca y para.",                  equipo_sugerido:"Trípode",   vibe:"Tenso" },
+    { nro_plano:3, tipo_de_plano:"Plano Detalle",     descripcion_visual:"Close up de las manos sobre las teclas, inmóviles. Tensión contenida. Foco en los dedos.",                                    equipo_sugerido:"Monopié",   vibe:"Cinematográfico" },
+    { nro_plano:4, tipo_de_plano:"Plano Americano",   descripcion_visual:"La pianista se levanta y camina hacia el fondo. Movimiento libre, cámara la sigue suavemente.",                               equipo_sugerido:"Gimbal",    vibe:"Contemplativo" },
+    { nro_plano:5, tipo_de_plano:"Contrapicado",      descripcion_visual:"Silueta de la pianista contra la ventana iluminada. Ciudad de fondo. Composición geométrica fuerte.",                         equipo_sugerido:"Trípode",   vibe:"Cinematográfico" },
+    { nro_plano:6, tipo_de_plano:"Primer Plano",      descripcion_visual:"Rostro de la pianista tomando la decisión. Determinación. La primera nota que ejecuta correctamente.",                        equipo_sugerido:"Trípode",   vibe:"Épico" },
   ];
 
   if (isClip) return [
-    { nro_plano:1, tipo_de_plano:"Plano Cenital",    descripcion_visual:"Vista aérea de la ciudad de noche. Rascacielos iluminados. Movimiento lento de dron sobre el skyline.",                    equipo_sugerido:"Dron",       vibe:"Editorial" },
-    { nro_plano:2, tipo_de_plano:"Plano General",    descripcion_visual:"El artista en la azotea, silueta contra las luces de la ciudad. Gran angular. Sensación de soledad.",                       equipo_sugerido:"Trípode",    vibe:"Cinematográfico" },
-    { nro_plano:3, tipo_de_plano:"Plano Secuencia",  descripcion_visual:"Travelling lateral siguiendo al artista en la calle mojada. Farolas reflejadas en el asfalto. Lluvia suave.",              equipo_sugerido:"Steadicam",  vibe:"Verité" },
-    { nro_plano:4, tipo_de_plano:"Primer Plano",     descripcion_visual:"Artista mirando a cámara cantando. Bokeh de farolas detrás. Conexión directa con el espectador.",                           equipo_sugerido:"Trípode",    vibe:"Intimista" },
-    { nro_plano:5, tipo_de_plano:"Plano Detalle",    descripcion_visual:"Montaje rápido: manos, teléfono, ventana iluminada. Cortes al ritmo del pre-coro.",                                         equipo_sugerido:"Monopié",    vibe:"Dinámico" },
-    { nro_plano:6, tipo_de_plano:"Plano Americano",  descripcion_visual:"Artista en pista de baile vacía. Luces estroboscópicas. Cámara circular comenzando a moverse.",                             equipo_sugerido:"Gimbal",     vibe:"Épico" },
+    { nro_plano:1, tipo_de_plano:"Cenital",           descripcion_visual:"Vista aérea de la ciudad de noche. Rascacielos iluminados. Movimiento lento de dron sobre el skyline.",                      equipo_sugerido:"Dron",      vibe:"Editorial" },
+    { nro_plano:2, tipo_de_plano:"Plano General",     descripcion_visual:"El artista en la azotea, silueta contra las luces de la ciudad. Gran angular. Sensación de soledad.",                        equipo_sugerido:"Trípode",   vibe:"Cinematográfico" },
+    { nro_plano:3, tipo_de_plano:"Plano Secuencia",   descripcion_visual:"Travelling lateral siguiendo al artista en la calle mojada. Farolas reflejadas en el asfalto. Lluvia suave.",               equipo_sugerido:"Steadicam", vibe:"Verité" },
+    { nro_plano:4, tipo_de_plano:"Primer Plano",      descripcion_visual:"Artista mirando a cámara cantando. Bokeh de farolas detrás. Conexión directa con el espectador.",                            equipo_sugerido:"Trípode",   vibe:"Intimista" },
+    { nro_plano:5, tipo_de_plano:"Plano Detalle",     descripcion_visual:"Montaje rápido: manos, teléfono, ventana iluminada. Cortes al ritmo del pre-coro.",                                          equipo_sugerido:"Monopié",   vibe:"Dinámico" },
+    { nro_plano:6, tipo_de_plano:"Plano Americano",   descripcion_visual:"Artista en pista de baile vacía. Luces estroboscópicas. Cámara circular comenzando a moverse.",                              equipo_sugerido:"Gimbal",    vibe:"Épico" },
   ];
 
   return [
-    { nro_plano:1, tipo_de_plano:"Plano Detalle",    descripcion_visual:"Macro del producto / objeto central de la narrativa. Foco nítido sobre superficie, fondo completamente desfocado.",        equipo_sugerido:"Monopié",    vibe:"Editorial" },
-    { nro_plano:2, tipo_de_plano:"Primer Plano",     descripcion_visual:"Rostro del protagonista en el centro del encuadre. Expresión de concentración. Luz lateral dramática.",                     equipo_sugerido:"Trípode",    vibe:"Cinematográfico" },
-    { nro_plano:3, tipo_de_plano:"Plano Americano",  descripcion_visual:"Protagonista en movimiento. Cámara siguiendo la acción de forma fluida. Entorno reconocible en contexto.",                  equipo_sugerido:"Gimbal",     vibe:"Dinámico" },
-    { nro_plano:4, tipo_de_plano:"Plano General",    descripcion_visual:"Vista completa de la locación. Personajes distribuidos en diferentes profundidades. Establece el espacio.",                 equipo_sugerido:"Trípode",    vibe:"Cinematográfico" },
-    { nro_plano:5, tipo_de_plano:"Plano Contrapicado","descripcion_visual":"Ángulo bajo engrandeciendo la figura del protagonista. Cielo o fondo arquitectónico de contraste.",                     equipo_sugerido:"Trípode",    vibe:"Épico" },
+    { nro_plano:1, tipo_de_plano:"Plano Detalle",     descripcion_visual:"Macro del producto / objeto central de la narrativa. Foco nítido sobre superficie, fondo completamente desfocado.",         equipo_sugerido:"Monopié",   vibe:"Editorial" },
+    { nro_plano:2, tipo_de_plano:"Primer Plano",      descripcion_visual:"Rostro del protagonista en el centro del encuadre. Expresión de concentración. Luz lateral dramática.",                      equipo_sugerido:"Trípode",   vibe:"Cinematográfico" },
+    { nro_plano:3, tipo_de_plano:"Plano Americano",   descripcion_visual:"Protagonista en movimiento. Cámara siguiendo la acción de forma fluida. Entorno reconocible en contexto.",                   equipo_sugerido:"Gimbal",    vibe:"Dinámico" },
+    { nro_plano:4, tipo_de_plano:"Plano General",     descripcion_visual:"Vista completa de la locación. Personajes distribuidos en diferentes profundidades. Establece el espacio.",                  equipo_sugerido:"Trípode",   vibe:"Cinematográfico" },
+    { nro_plano:5, tipo_de_plano:"Contrapicado",      descripcion_visual:"Ángulo bajo engrandeciendo la figura del protagonista. Cielo o fondo arquitectónico de contraste.",                          equipo_sugerido:"Trípode",   vibe:"Épico" },
   ];
 }
 
