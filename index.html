@@ -1545,10 +1545,15 @@ document.getElementById('btnRun').addEventListener('click', async () => {
     setTimeout(logClose, 2200);
 
     toast(`${planos.length} planos generados correctamente.`, 'success');
-  } catch (err) {
-    console.error(err);
-    logUpd(l1, `Error: ${err.message}`, 'err');
-   toast('Modo demo — los resultados son simulados. Escribime para activar la integración real.', 'info');
+} catch (err) {
+  const l3 = logLine('Cargando demo data...', 'sp');
+  await new Promise(r => setTimeout(r, 400));
+  const demoPlanos = getDemoPlanos(guion);
+  renderResults(demoPlanos, JSON.stringify(demoPlanos, null, 2));
+  logUpd(l3, 'Demo data lista', 'ok');
+  setTimeout(logClose, 2200);
+  toast('Modo demo — los resultados son simulados. Escribime para activar la integración real.', 'info');
+}
 
     // Fallback demo data so the UI still impresses
     const demoPlanos = getDemoPlanos(guion);
